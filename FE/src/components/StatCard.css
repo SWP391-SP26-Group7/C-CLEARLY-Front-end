@@ -1,0 +1,5 @@
+/* Compact StatCard overrides */
+.stat-card{padding:10px;border-radius:8px;box-shadow:0 1px 6px rgba(14,30,37,0.06);display:flex;align-items:center}
+.stat-card .stat-icon img{width:40px;margin-right:10px}
+.stat-card .stat-content h3{font-size:16px;margin:0}
+.stat-card .stat-content p{font-size:12px;margin:4px 0 0;color:#636e72}

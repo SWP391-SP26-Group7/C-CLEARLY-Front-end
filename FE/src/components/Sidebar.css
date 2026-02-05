@@ -1,0 +1,18 @@
+/* Compact Sidebar adjustments */
+.sidebar{
+  width:200px;height:100vh;background:linear-gradient(135deg, rgba(102,126,234,0.95), rgba(118,75,162,0.95));color:#fff;display:flex;flex-direction:column;padding:8px 6px;box-shadow:2px 0 6px rgba(0,0,0,0.06)
+}
+.logo{text-align:center;margin-bottom:12px}
+.logo img{width:72px;height:auto}
+.menu,.bottom-menu{list-style:none;padding:0;margin:0}
+.menu{flex:1}
+.bottom-menu{margin-top:auto;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px}
+.menu-item,.sub-item{margin:4px 8px}
+.menu-card{display:flex;align-items:center;padding:8px 10px;border-radius:6px;background-color:rgba(0,0,0,0.06);cursor:pointer;transition:background-color .18s,box-shadow .18s}
+.menu-card:hover{background-color:rgba(255,255,255,0.06);box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.menu-icon,.sub-icon{margin-right:8px;font-size:16px}
+.chevron{margin-left:auto;font-size:12px}
+.sub-menu{list-style:none;padding:0;margin:4px 0 0 14px}
+.sub-item{padding:6px 10px;border-radius:6px;cursor:pointer;transition:background-color .18s}
+.sub-item:hover{background-color:rgba(255,255,255,0.04)}
+.active .menu-card,.active{background-color:rgba(255,255,255,0.08);box-shadow:0 1px 3px rgba(0,0,0,0.08)}

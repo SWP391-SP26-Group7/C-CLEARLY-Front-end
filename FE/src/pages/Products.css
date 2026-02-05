@@ -1,0 +1,8 @@
+.products-page{padding:14px}
+.products-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.products-toolbar input{padding:8px;border:1px solid #ddd;border-radius:6px}
+.products-toolbar button{padding:8px 10px;border-radius:6px;border:none;background:linear-gradient(90deg,#6c5ce7,#00bcd4);color:#fff}
+.products-table{width:100%;border-collapse:collapse;background:#fff}
+.products-table th,.products-table td{padding:8px 10px;border-bottom:1px solid #f1f1f1;text-align:left}
+.products-table th{background:#fafafa}
+.products-table button{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fff}

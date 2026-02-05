@@ -1,0 +1,6 @@
+/* Compact OrderTable styles */
+.order-table{font-size:13px}
+.order-table th,.order-table td{padding:8px;border-bottom:1px solid #f1f5f9}
+.order-table tr{height:38px}
+.order-table thead th{font-weight:600}
+.order-table tbody tr:hover{background:rgba(15,23,42,0.02)}

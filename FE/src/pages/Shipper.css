@@ -1,0 +1,84 @@
+/* CSS cho trang Shipper */
+.shipper-page {
+  padding: 20px;
+}
+
+.shipper-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.shipper-table th, .shipper-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.shipper-table th {
+  background-color: #f2f2f2;
+}
+
+.shipper-detail {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.detail-content h3 {
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+.detail-content p {
+  margin: 5px 0;
+  font-size: 1.1em;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.orders-table th, .orders-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.orders-table th {
+  background-color: #f2f2f2;
+}
+
+/* Màu sắc cho trạng thái */
+.status-chờ-nhận-shipper {
+  color: #e74c3c; /* Đỏ */
+  font-weight: bold;
+}
+
+.status-đang-giao {
+  color: #f39c12; /* Cam */
+  font-weight: bold;
+}
+
+.status-hoàn-thành {
+  color: #27ae60; /* Xanh lá */
+  font-weight: bold;
+}
+
+.status-sẵn-sàng {
+  color: #3498db; /* Xanh dương */
+  font-weight: bold;
+}
