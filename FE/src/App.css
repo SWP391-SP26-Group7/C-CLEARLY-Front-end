@@ -4,8 +4,8 @@
   --text-color: #2d3436;
   --muted: #636e72;
   --bg: #f6f7fb;
-  --accent-1: rgba(102,126,234,0.95); /* purple-blue */
-  --accent-2: rgba(118,75,162,0.95);
+  --accent-1: #041823; /* deep blue-black */
+  --accent-2: #08323b; /* slightly lighter blue-black */
   --card-radius: 8px;
   --soft-shadow: 0 1px 6px rgba(14,30,37,0.06);
   --strong-shadow: 0 2px 8px rgba(14,30,37,0.08);
@@ -19,6 +19,7 @@
 .app{
   display:flex;
   height:100vh;
+  overflow:hidden;
   font-family:var(--font-sans);
   background-color:var(--bg);
   color:var(--text-color);
@@ -27,10 +28,12 @@
 
 .sidebar{
   width:200px;
+  flex-shrink:0;
   background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
   color: #fff;
   padding: var(--space-md);
   box-shadow: 2px 0 6px rgba(0,0,0,0.06);
+  overflow-y:auto;
 }
 
 .logo img{width:84px;height:auto;margin-bottom:10px}
@@ -41,7 +44,7 @@
 .menu li:hover{background-color:rgba(255,255,255,0.06)}
 .menu li.active{background-color:rgba(255,255,255,0.08);font-weight:600}
 
-.main-content{flex:1;display:flex;flex-direction:column}
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden}
 
 header{
   background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
@@ -103,7 +106,7 @@ main{padding:12px;flex:1;overflow-y:auto;background-color:var(--bg)}
 .detail-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
 .order-id{font-size:16px;color:var(--text-color);margin-bottom:8px}
 .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:600;margin-bottom:6px}
-.badge.pending{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff}
+.badge.pending{background:#e8f4ff;color:#0b6fbf}
 .badge.confirmed{background:#e6f6ef;color:#12764f}
 .badge.returning{background:#fff4e6;color:#8a5a00}
 .badge-desc{font-size:13px;color:var(--muted);margin-top:6px}

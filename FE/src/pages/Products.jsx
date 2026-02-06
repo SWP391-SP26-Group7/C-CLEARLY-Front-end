@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import ProductDrawer from '../components/ProductDrawer';
-import seedProducts, { STORAGE_KEY } from '../utils/seedProducts';
 import './Products.css';
+
+const STORAGE_KEY = 'cc_products_v1';
 
 const loadProducts = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return seedProducts();
-    return JSON.parse(raw || '[]');
-  } catch (e) { return seedProducts(); }
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
 };
 
 const saveProducts = (arr) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { FaShoppingCart, FaTruck, FaBoxes } from 'react-icons/fa';
 import './StatCard.css'; // CSS cho thẻ
 
-const StatCard = ({ title, value, icon }) => {
+const StatCard = ({ title, value, icon, compact = true }) => {
   // Component StatCard hiển thị thẻ thống kê tái sử dụng
   // title: tiêu đề thẻ
   // value: giá trị số
@@ -22,9 +22,9 @@ const StatCard = ({ title, value, icon }) => {
   };
 
   return (
-    <div className="stat-card">
-      <div className="stat-icon">
-        {getIcon()}
+    <div className={`stat-card ${compact ? 'compact' : 'large'}`}>
+      <div className="stat-left">
+        <div className="stat-square">{getIcon()}</div>
       </div>
       <div className="stat-content">
         <h3>{value}</h3>

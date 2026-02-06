@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import seedOrders, { defaultOrders } from '../utils/seedOrders';
 
 // DeliveredOrders: danh sách các đơn đã được shipper giao, chờ xác nhận
 const STORAGE_KEY = 'cc_orders_v1';
@@ -7,18 +6,15 @@ const STORAGE_KEY = 'cc_orders_v1';
 const loadOrders = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultOrders;
-    return JSON.parse(raw);
+    return raw ? JSON.parse(raw) : [];
   } catch (e) {
-    return defaultOrders;
+    return [];
   }
 };
 
 const saveOrders = (orders) => localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
 
 const DeliveredOrders = ({ setCurrentPage }) => {
-  // ensure seed on component mount in case App didn't run seed
-  useEffect(() => { try { seedOrders(); } catch (e) {} }, []);
   const [orders, setOrders] = useState(loadOrders());
 
   useEffect(() => {
@@ -42,14 +38,14 @@ const DeliveredOrders = ({ setCurrentPage }) => {
   return (
     <div className="order-table-container">
       <h2>Đơn đã giao</h2>
-      <table className="order-table">
+      <table className="order-table framed-table">
         <thead>
           <tr>
             <th>ID đơn hàng</th>
             <th>Tên sản phẩm</th>
             <th>Tổng tiền</th>
             <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th>Xem chi tiết</th>
           </tr>
         </thead>
         <tbody>
@@ -58,9 +54,16 @@ const DeliveredOrders = ({ setCurrentPage }) => {
               <td>{o.id}</td>
               <td>{o.products.map(p => typeof p === 'string' ? p : p.name).join(', ')}</td>
               <td>{o.total.toLocaleString()} {o.currency}</td>
-              <td>{o.status}</td>
               <td>
-                <button onClick={() => handleView(o.id)}>Xem chi tiết</button>
+                {(() => {
+                  const s = (o.status || '').toLowerCase();
+                  if (s.includes('xác nhận') || s.includes('hoàn tất')) return <span className="status-badge status-success">{o.status}</span>;
+                  if (s.includes('đang') || s.includes('chờ')) return <span className="status-badge status-warning">{o.status}</span>;
+                  return <span className="status-badge status-info">{o.status}</span>;
+                })()}
+              </td>
+              <td>
+                <button className="action-link" onClick={() => handleView(o.id)}>Xem chi tiết</button>
               </td>
             </tr>
           ))}

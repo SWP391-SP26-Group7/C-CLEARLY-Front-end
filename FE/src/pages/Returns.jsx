@@ -19,7 +19,7 @@ const Returns = ({ setCurrentPage }) => {
   return (
     <div className="order-table-container">
       <h2>Đổi trả hàng</h2>
-      <table className="order-table">
+      <table className="order-table framed-table">
         <thead>
           <tr>
             <th>Mã phiếu</th>
@@ -27,7 +27,7 @@ const Returns = ({ setCurrentPage }) => {
             <th>Tên khách hàng</th>
             <th>Tên sản phẩm</th>
             <th>Trạng thái đổi trả</th>
-            <th>Hành động</th>
+            <th>Xem chi tiết</th>
           </tr>
         </thead>
         <tbody>
@@ -37,8 +37,13 @@ const Returns = ({ setCurrentPage }) => {
               <td>{r.orderId}</td>
               <td>{r.customerName}</td>
               <td>{(r.productNames || []).join(', ')}</td>
-              <td>{r.status}</td>
-              <td><button onClick={() => handleView(r.id)}>Xem chi tiết</button></td>
+              <td>{(() => {
+                const s = (r.status || '').toLowerCase();
+                if (s.includes('xác nhận') || s.includes('hoàn')) return <span className="status-badge status-success">{r.status}</span>;
+                if (s.includes('đang') || s.includes('chờ')) return <span className="status-badge status-warning">{r.status}</span>;
+                return <span className="status-badge status-info">{r.status}</span>;
+              })()}</td>
+              <td><button className="action-link" onClick={() => handleView(r.id)}>Xem chi tiết</button></td>
             </tr>
           ))}
         </tbody>

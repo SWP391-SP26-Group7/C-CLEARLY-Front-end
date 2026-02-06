@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
 import Modal from '../components/Modal';
 import './Prescription.css'; // CSS cho trang
+
+const STORAGE_KEY = 'cc_prescriptions_v1';
+
+const loadPrescriptions = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+};
 
 const Prescription = ({ setCurrentPage: setAppCurrentPage }) => {
   // Trang Quản lý đơn hàng Prescription
@@ -18,14 +27,7 @@ const Prescription = ({ setCurrentPage: setAppCurrentPage }) => {
     OS: { sphere: '', cylinder: '', axis: '', pd: '' }
   });
 
-  const [orders, setOrders] = useState([
-    { id: 1, productName: 'Kính Lily (Lily Frame)', quantity: 3, status: 'Xác nhận đơn hàng' },
-    { id: 2, productName: 'Kính Aviator', quantity: 1, status: 'Gia công', refractionData: {
-      OD: { sphere: '-2.00', cylinder: '-1.00', axis: '90', pd: '62' },
-      OS: { sphere: '-1.50', cylinder: '-0.50', axis: '180', pd: '61' }
-    }},
-    // Mock data, sau này backend sẽ cung cấp
-  ]);
+  const [orders, setOrders] = useState(loadPrescriptions());
 
   // Tính toán items hiển thị cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;

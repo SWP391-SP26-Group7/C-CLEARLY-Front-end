@@ -28,11 +28,13 @@ const Header = ({ title }) => {
     <header className="header">
       <div className="header-left">
         <img src="/images/Logo.png" alt="Logo" />
-        <span className="title">/ MANAGER</span>
+        <div>
+          <div className="title">Manager Dashboard</div>
+        </div>
       </div>
       <div className="header-right">
         <button className="notification-btn" onClick={toggleNotifications}>
-          <FaBell size={30} />
+          <FaBell size={18} />
         </button>
         {showNotifications && (
           <div className="notification-dropdown">
@@ -42,8 +44,11 @@ const Header = ({ title }) => {
           </div>
         )}
         <div className="user-info" onClick={toggleUserDropdown}>
-          <FaUser size={40} />
-          <span>Manager</span>
+          <div className="user-avatar">M</div>
+          <div>
+            <div className="user-name">Manager</div>
+            <div className="user-role">Manager</div>
+          </div>
         </div>
         {showUserDropdown && (
           <div className="user-dropdown">

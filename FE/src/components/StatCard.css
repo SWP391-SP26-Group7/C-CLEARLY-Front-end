@@ -1,5 +1,10 @@
 /* Compact StatCard overrides */
-.stat-card{padding:10px;border-radius:8px;box-shadow:0 1px 6px rgba(14,30,37,0.06);display:flex;align-items:center}
-.stat-card .stat-icon img{width:40px;margin-right:10px}
-.stat-card .stat-content h3{font-size:16px;margin:0}
-.stat-card .stat-content p{font-size:12px;margin:4px 0 0;color:#636e72}
+.stat-card{padding:12px;border-radius:10px;box-shadow:0 4px 12px rgba(14,30,37,0.04);display:flex;align-items:center;background:#fff}
+.stat-card.compact{padding:8px}
+.stat-card.large{flex-direction:row;align-items:center;padding:14px}
+.stat-card .stat-left{margin-right:12px}
+.stat-card .stat-square{width:56px;height:56px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#f4f6f7}
+.stat-card .stat-square svg{color:#6e7b7a}
+.stat-card .stat-content h3{font-size:22px;margin:0;color:#213435;font-weight:700}
+.stat-card .stat-content p{font-size:13px;margin:6px 0 0;color:#6b7a80}
+.stat-card.large .stat-square svg{width:32px;height:32px}

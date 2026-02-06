@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
 import Modal from '../components/Modal';
 import './PreOrder.css'; // CSS cho trang
+
+const STORAGE_KEY = 'cc_preorders_v1';
+
+const loadPreOrders = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+};
 
 const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
   // Trang Quản lý đơn hàng Pre-Order
@@ -13,11 +22,7 @@ const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [orders, setOrders] = useState([
-    { id: 1, productName: 'Kính cận 1', quantity: 2, status: 'Chờ xác nhận', totalPrice: 500000, paymentAmount: 100000 },
-    { id: 2, productName: 'Kính râm 2', quantity: 1, status: 'Chờ làm kính', totalPrice: 300000, paymentAmount: 150000 },
-    // Mock data, sau này backend sẽ cung cấp
-  ]);
+  const [orders, setOrders] = useState(loadPreOrders());
 
   // Tính toán items hiển thị cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;

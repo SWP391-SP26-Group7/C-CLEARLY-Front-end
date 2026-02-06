@@ -19,9 +19,7 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
       { key: 'delivered', label: 'Đơn đã giao', icon: FaCheckCircle }, // Sub-menu: Đơn đã giao
       { key: 'returns', label: 'Đổi trả hàng', icon: FaUndoAlt } // Sub-menu: Đổi trả hàng
     ]},
-    { key: 'inventory', label: 'Quản lý kho', icon: FaWarehouse, sub: [
-      { key: 'products', label: 'Sản phẩm', icon: FaGlasses }
-    ] }, // Menu: Quản lý tồn kho sản phẩm
+    { key: 'products', label: 'Quản lý sản phẩm', icon: FaGlasses }, // Menu: Quản lý sản phẩm (gộp)
     { key: 'staff', label: 'Quản lý nhân sự', icon: FaUsers },
     { key: 'shipper', label: 'Quản lý giao hàng', icon: FaTruck } // Menu: Quản lý shipper và giao hàng
   ];
@@ -50,7 +48,7 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
   return (
     <div className="sidebar"> {/* Container chính của Sidebar */}
       <div className="logo"> {/* Phần logo ở đầu Sidebar */}
-        <img src="/images/logo.png" alt="Logo" />
+        <img src="/images/Logo.png" alt="Logo" />
       </div>
       <ul className="menu"> {/* Danh sách menu chính */}
         {menuItems.map(item => (

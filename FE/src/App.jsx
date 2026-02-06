@@ -15,19 +15,20 @@ import Support from './pages/Support'; // Import trang Hỗ trợ
 import ChangePassword from './pages/ChangePassword'; // Import trang Đổi mật khẩu
 import StaffManagement from './pages/StaffManagement';
 import './App.css'; // Import CSS chính cho App
-import seedOrders from './utils/seedOrders';
-import seedProducts from './utils/seedProducts';
-import seedStaff from './utils/seedStaff';
 
 function App() { // Component chính của ứng dụng
   // Quản lý state cho trang hiện tại
   const [currentPage, setCurrentPage] = useState('dashboard'); // State lưu trang đang hiển thị, mặc định 'dashboard'
 
-  // Seed initial data into localStorage on first load
+  // Clear all old data from localStorage on app load
   useEffect(() => {
-    try { seedOrders(); } catch (e) { /* ignore */ }
-    try { seedProducts(); } catch (e) { /* ignore */ }
-    try { seedStaff(); } catch (e) { /* ignore */ }
+    localStorage.removeItem('cc_orders_v1');
+    localStorage.removeItem('cc_products_v1');
+    localStorage.removeItem('cc_staff_v1');
+    localStorage.removeItem('cc_preorders_v1');
+    localStorage.removeItem('cc_prescriptions_v1');
+    localStorage.removeItem('cc_shippers_v1');
+    localStorage.removeItem('cc_returns_v1');
   }, []);
 
   // Hàm render nội dung dựa trên currentPage: Switch case để chọn component tương ứng

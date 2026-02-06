@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import StaffDrawer from '../components/StaffDrawer';
-import seedStaff, { STORAGE_KEY } from '../utils/seedStaff';
 import './StaffManagement.css';
+
+const STORAGE_KEY = 'cc_staff_v1';
 
 const loadStaff = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return seedStaff();
-    return JSON.parse(raw || '[]');
-  } catch (e) { return seedStaff(); }
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
 };
 
 const saveStaff = (arr) => { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); };
@@ -75,7 +75,7 @@ const StaffManagement = () => {
               <td>{s.status}</td>
               <td>
                 <button onClick={()=>handleEdit(s)}>Chỉnh sửa</button>
-                <button onClick={()=>handleToggle(s.id)}>{s.status==='Active'?'Vô hiệu hoá':'Kích hoạt'}</button>
+                <button onClick={()=>handleToggle(s.id)}>{s.status==='Active'?'Xóa tài khoản':'Kích hoạt'}</button>
               </td>
             </tr>
           ))}

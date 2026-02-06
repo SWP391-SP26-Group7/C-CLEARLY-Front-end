@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaInfoCircle, FaTags, FaImage, FaBoxes, FaTimes } from 'react-icons/fa';
 import './ProductDrawer.css';
-import { STORAGE_KEY } from '../utils/seedProducts';
+
+const STORAGE_KEY = 'cc_products_v1';
 
 const ProductDrawer = ({ open, product, onClose, onSave }) => {
   const [model, setModel] = useState(product || {});

@@ -1,8 +1,12 @@
-/* Compact Header styles */
-header.app-header{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg, rgba(102,126,234,0.95), rgba(118,75,162,0.95));box-shadow:0 1px 6px rgba(0,0,0,0.06);color:#fff}
-.app-header .title{font-size:18px;font-weight:700;margin:0}
-.app-header .header-left{display:flex;align-items:center}
-.app-header .header-left img{width:36px;margin-right:8px}
-.app-header .header-right{display:flex;align-items:center;gap:8px}
-.app-header .notification-btn img{width:20px}
-.app-header .user-info .avatar{width:32px;height:32px}
+/* Header styles — minimal, professional */
+.header{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,#041823,#08323b);box-shadow:0 2px 8px rgba(3,8,10,0.6);border-bottom:1px solid rgba(0,0,0,0.2);}
+.header .header-left{display:flex;align-items:center;gap:12px}
+.header .header-left img{width:40px;height:40px;object-fit:contain}
+.header .title{font-size:16px;font-weight:700;color:#e6f7f8}
+.header .header-right{display:flex;align-items:center;gap:12px}
+.notification-btn{background:transparent;border:0;padding:6px;border-radius:6px;cursor:pointer;color:#b6d6d8}
+.notification-btn:hover{background:rgba(255,255,255,0.02)}
+.user-info{display:flex;align-items:center;gap:8px;cursor:pointer}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:#0f3a3e;display:flex;align-items:center;justify-content:center;color:#d7f0ef;font-weight:700}
+.user-role{font-size:13px;color:#b6d6d8}
+.user-name{font-size:14px;color:#e6f7f8}

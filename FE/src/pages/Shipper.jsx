@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
 import Modal from '../components/Modal';
 import './Shipper.css'; // CSS cho trang
+
+const STORAGE_KEY = 'cc_shippers_v1';
+
+const loadShippers = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+};
 
 const Shipper = () => {
   // Trang Quản lý giao hàng
@@ -14,14 +23,7 @@ const Shipper = () => {
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
 
-  const [shippers, setShippers] = useState([
-    { id: 1, name: 'Shipper A', status: 'Đang giao', orders: [
-      { id: 101, productName: 'Kính Lily (Lily Frame)', customer: 'Nguyễn Văn A', address: 'Hà Nội', status: 'Đang giao' },
-      { id: 102, productName: 'Kính Aviator', customer: 'Trần Thị B', address: 'TP.HCM', status: 'Đang giao' }
-    ]},
-    { id: 2, name: 'Shipper B', status: 'Sẵn sàng', orders: [] },
-    // Mock data, sau này backend sẽ cung cấp
-  ]);
+  const [shippers, setShippers] = useState(loadShippers());
 
   // Tính toán items hiển thị cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;
