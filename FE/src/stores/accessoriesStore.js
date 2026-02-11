@@ -53,7 +53,7 @@ const MOCK_ACCESSORIES = [
     name: 'Set Phụ Kiện Vít/Đệm Mũi',
     price: 140000,
     image:
-      'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=400&h=400&fit=crop',
+      'https://cdn.kinhmatlily.com/lily01/2023/3/Screenshot_22-1680147476000.jpeg',
     category: 'accessories',
     description: 'Bộ phụ kiện thay thế đầy đủ',
   },
@@ -89,7 +89,7 @@ const MOCK_ACCESSORIES = [
     name: 'Bộ Vệ Sinh Kính 3 Món',
     price: 85000,
     image:
-      'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
+      'https://kavi.vn/upload/image/bo-dung-cu-cho-nguoi-deo-kinh-kavi-kit.jpg',
     category: 'cleaning',
     description: 'Bộ vệ sinh kính hoàn chỉnh',
   },
@@ -98,7 +98,7 @@ const MOCK_ACCESSORIES = [
     name: 'Hộp Kính Gấp Gọn',
     price: 65000,
     image:
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop',
+      'https://cdn.kinhmatlily.com/lily01/2022/1/phu_kien_lily-1643340706000.jpeg',
     category: 'case',
     description: 'Hộp kính có thể gấp gọn tiện lợi',
   },
@@ -116,7 +116,7 @@ const MOCK_ACCESSORIES = [
     name: 'Dây Đeo Kính Kim Loại',
     price: 75000,
     image:
-      'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&h=400&fit=crop',
+      'https://cdn.kinhmatlily.com/lily01/2022/8/018-TRANG-1659499536000.jpeg',
     category: 'strap',
     description: 'Dây đeo kính kim loại sang trọng',
   },
