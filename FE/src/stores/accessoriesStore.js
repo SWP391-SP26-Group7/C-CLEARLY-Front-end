@@ -62,7 +62,7 @@ const MOCK_ACCESSORIES = [
     name: 'Dây Đeo Kính Thể Thao',
     price: 45000,
     image:
-      'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&h=400&fit=crop',
+      'https://cdn.kinhmatlily.com/lily01/2022/8/003-BAC-1659423016000.jpeg',
     category: 'strap',
     description: 'Dây đeo kính cho hoạt động thể thao',
   },
