@@ -1,0 +1,15 @@
+.chat-item { display:flex; gap:12px; padding:10px; border-radius:8px; cursor:pointer; align-items:center; }
+.chat-item:hover { background: #fafcff; }
+.chat-item.active { background: #eaf8ff; border-left:3px solid #4db6ff; }
+.chat-item.unread { background: rgba(255,77,79,0.04); border-radius:10px; }
+.ci-avatar { position:relative; width:48px; height:48px; }
+.avatar { width:48px; height:48px; border-radius:8px; background:#dfefff; display:flex; align-items:center; justify-content:center; font-weight:600; }
+.dot { position:absolute; right:2px; bottom:2px; width:12px; height:12px; border-radius:50%; background:#bbb; border:2px solid #fff; }
+.dot.online { background:#2ecc71; }
+.ci-body { flex:1; min-width:0; }
+.ci-top { display:flex; justify-content:space-between; align-items:center; }
+.ci-time { font-size:12px; color:#888; }
+.ci-bottom { display:flex; justify-content:space-between; align-items:center; margin-top:6px; }
+.ci-preview { color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ci-badge { background:#ff4d4f; color:#fff; padding:2px 6px; border-radius:12px; font-size:12px; }
+.bold { font-weight:700; color:#222 }

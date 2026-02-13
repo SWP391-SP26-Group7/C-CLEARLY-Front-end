@@ -1,0 +1,5 @@
+.cid-backdrop { position:fixed; right:0; top:0; bottom:0; left:0; background:rgba(0,0,0,0.3); display:flex; justify-content:flex-end; }
+.cid-drawer { width:320px; background:#fff; height:100%; padding:16px; box-shadow:-4px 0 12px rgba(0,0,0,0.08); }
+.cid-header { display:flex; justify-content:space-between; align-items:center; }
+.cid-body { margin-top:12px; font-size:14px; }
+.cid-body ul { padding-left:18px; }

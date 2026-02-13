@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // Import React và useState hook để quản lý state
-import { FaTachometerAlt, FaGlasses, FaShoppingCart, FaFileMedical, FaWarehouse, FaTruck, FaQuestionCircle, FaKey, FaSignOutAlt, FaChevronDown, FaChevronUp, FaCheckCircle, FaUndoAlt, FaUsers } from 'react-icons/fa'; // Import các icon từ react-icons cho menu
+import { FaTachometerAlt, FaGlasses, FaShoppingCart, FaFileMedical, FaWarehouse, FaTruck, FaQuestionCircle, FaKey, FaSignOutAlt, FaChevronDown, FaChevronUp, FaCheckCircle, FaUndoAlt, FaUsers, FaHeadset } from 'react-icons/fa'; // Import các icon từ react-icons cho menu
 import './Sidebar.css'; // Import CSS cho styling Sidebar
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
@@ -21,7 +21,8 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
     ]},
     { key: 'products', label: 'Quản lý sản phẩm', icon: FaGlasses }, // Menu: Quản lý sản phẩm (gộp)
     { key: 'staff', label: 'Quản lý nhân sự', icon: FaUsers },
-    { key: 'shipper', label: 'Quản lý giao hàng', icon: FaTruck } // Menu: Quản lý shipper và giao hàng
+    { key: 'shipper', label: 'Quản lý giao hàng', icon: FaTruck }, // Menu: Quản lý shipper và giao hàng
+    { key: 'customersupport', label: 'Chăm sóc khách hàng', icon: FaHeadset }
   ];
 
   // Dữ liệu menu bottom: Hỗ trợ, Đổi mật khẩu, Đăng xuất (tách biệt với nghiệp vụ)

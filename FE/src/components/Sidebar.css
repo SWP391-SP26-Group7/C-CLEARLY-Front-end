@@ -9,14 +9,13 @@
 .menu{flex:1}
 .bottom-menu{margin-top:auto;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px}
 .menu-item,.sub-item{margin:4px 8px}
-.menu-card{display:flex;align-items:center;padding:10px 12px;border-radius:6px;cursor:pointer;transition:background-color .18s,box-shadow .18s;position:relative}
-.menu-card:hover{background-color:rgba(255,255,255,0.02)}
-.menu-icon,.sub-icon{margin-right:12px;font-size:16px;color:#9fbfc3}
-.chevron{margin-left:auto;font-size:12px;color:#9fbfc3}
+.menu-card{display:flex;align-items:center;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background-color .18s,box-shadow .18s;position:relative}
+.menu-card:hover{background-color:rgba(255,255,255,0.03)}
+.menu-icon,.sub-icon{margin-right:12px;font-size:16px;color:#b6dfe0}
+.chevron{margin-left:auto;font-size:12px;color:#b6dfe0}
 .sub-menu{list-style:none;padding:0;margin:4px 0 0 14px}
 .sub-item{padding:6px 10px;border-radius:6px;cursor:pointer;transition:background-color .18s}
 .sub-item:hover{background-color:rgba(255,255,255,0.04)}
-.active .menu-card,.active{background-color:transparent}
-.menu-item.active > .menu-card:before{content:'';position:absolute;left:-6px;top:10px;bottom:10px;width:6px;background:#2ea6a8;border-radius:4px}
-.menu-item.active > .menu-card{background:rgba(46,166,168,0.06)}
+.menu-item.active > .menu-card:before{content:'';position:absolute;left:-8px;top:8px;bottom:8px;width:6px;background:#2ea6a8;border-radius:6px}
+.menu-item.active > .menu-card{background:rgba(46,166,168,0.12);box-shadow:inset 0 0 0 1px rgba(46,166,168,0.06)}
 .menu-item span{color:#e6f7f8}

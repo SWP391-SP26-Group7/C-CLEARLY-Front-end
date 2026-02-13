@@ -12,6 +12,7 @@ import Inventory from './pages/Inventory'; // Import trang Quản lý kho
 import Products from './pages/Products'; // Trang Quản lý Sản phẩm (Products)
 import Shipper from './pages/Shipper'; // Import trang Quản lý giao hàng
 import Support from './pages/Support'; // Import trang Hỗ trợ
+import CustomerSupport from './pages/CustomerSupport'; // Import trang Chăm sóc khách hàng
 import ChangePassword from './pages/ChangePassword'; // Import trang Đổi mật khẩu
 import StaffManagement from './pages/StaffManagement';
 import './App.css'; // Import CSS chính cho App
@@ -64,6 +65,8 @@ function App() { // Component chính của ứng dụng
         return <Shipper />; // Hiển thị Shipper
       case 'support':
         return <Support />; // Hiển thị Support
+      case 'customersupport':
+        return <CustomerSupport />; // Hiển thị Chăm sóc khách hàng
       case 'changepassword':
         return <ChangePassword />; // Hiển thị Change Password
       default:

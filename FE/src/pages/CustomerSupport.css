@@ -1,0 +1,9 @@
+.cs-page { height: calc(100vh - 60px); }
+.cs-container { display:flex; height:100%; }
+.cs-sidebar { width:30%; border-right:1px solid #e6e6e6; background:#fbfbfd; }
+.cs-main { width:70%; display:flex; flex-direction:column; background:#fff; }
+
+@media (max-width: 900px) {
+  .cs-container { flex-direction:column; }
+  .cs-sidebar, .cs-main { width:100%; }
+}

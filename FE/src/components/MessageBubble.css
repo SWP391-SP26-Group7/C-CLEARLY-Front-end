@@ -1,0 +1,6 @@
+.msg-row { display:flex; margin:10px; }
+.msg-row.owner { justify-content:flex-end; }
+.bubble { max-width:70%; padding:10px 12px; border-radius:12px; background:#f1f3f5; }
+.msg-row.owner .bubble { background:#dff7e9; }
+.msg-text { margin-bottom:6px; }
+.msg-meta { font-size:11px; color:#777; text-align:right; }

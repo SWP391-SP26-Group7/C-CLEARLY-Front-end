@@ -1,0 +1,17 @@
+.chat-window { display:flex; flex-direction:column; height:100%; }
+.cw-header { display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee; }
+.cw-left { display:flex; gap:12px; align-items:center; }
+.cw-avatar { width:44px; height:44px; border-radius:8px; background:#dfefff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.cw-name { font-weight:600; }
+.cw-status { font-size:12px; color:#888; }
+.cw-actions button { margin-left:8px; padding:8px; background:transparent; border:1px solid #eee; border-radius:8px; cursor:pointer; }
+.cw-body { flex:1; overflow:auto; padding:12px; background:linear-gradient(#fff,#fafafa); }
+.cw-input { display:flex; align-items:center; padding:10px; border-top:1px solid #eee; gap:8px; }
+.cw-input-left button { margin-right:6px; padding:8px; border-radius:8px; border:1px solid #eee; background:#fff; cursor:pointer; }
+.cw-input input { flex:1; padding:10px 12px; border-radius:20px; border:1px solid #e6e6e6; }
+.cw-send button { padding:8px 12px; background:#4db6ff; color:#fff; border:none; border-radius:10px; cursor:pointer; }
+
+.chat-window.empty { display:flex; align-items:center; justify-content:center; }
+.cw-empty { text-align:center; color:#879; }
+.cw-empty-icon { font-size:40px; margin-bottom:12px }
+.cw-empty-text { font-size:15px }
