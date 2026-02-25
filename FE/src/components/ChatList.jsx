@@ -34,7 +34,6 @@ const ChatList = ({ conversations = [], selected, setSelected }) => {
       const q = query.toLowerCase();
       if (q && !( (c.name||'').toLowerCase().includes(q) || (c.last||'').toLowerCase().includes(q) || (c.id||'').includes(q))) return false;
       if (tab === 'unread') return (c.unread||0) > 0;
-      if (tab === 'processed') return (c.unread||0) === 0;
       return true;
     });
   }, [query, tab, list]);
@@ -51,10 +50,9 @@ const ChatList = ({ conversations = [], selected, setSelected }) => {
         <h3>Chăm sóc khách hàng</h3>
         <input placeholder="Tìm tên / SĐT / #mã đơn" value={query} onChange={e=>setQuery(e.target.value)} />
       </div>
-      <div className="cl-tabs cl-tabs-3">
+      <div className="cl-tabs cl-tabs-2">
         <button className={tab==='all'?'active':''} onClick={()=>setTab('all')}>Tất cả</button>
         <button className={tab==='unread'?'active':''} onClick={()=>setTab('unread')}>Chưa đọc</button>
-        <button className={tab==='processed'?'active':''} onClick={()=>setTab('processed')}>Đã xử lý</button>
       </div>
       <div className="cl-list">
         {filtered.length === 0 ? (

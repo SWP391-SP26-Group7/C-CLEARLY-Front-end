@@ -29,13 +29,15 @@ const ProductDrawer = ({ open, product, onClose, onSave }) => {
 
   // Variants management (simple)
   const addVariant = () => {
-    const v = { id: `V${Date.now()}`, sku: '', name: '', price: 0, stock: 0 };
+    const v = { id: `V${Date.now()}`, sku: '', color_name: '', sale_price: 0, stock: 0, is_preorder: false, expected_availability: '' };
     setModel(prev => ({ ...prev, variants: [ ...(prev.variants||[]), v ] }));
   };
   const updateVariant = (i, field) => (e) => {
+    const value = (field === 'sale_price' || field === 'stock') ? Number(e.target.value) : 
+                  (field === 'is_preorder') ? e.target.checked : e.target.value;
     setModel(prev => {
       const vs = [...(prev.variants||[])];
-      vs[i] = { ...vs[i], [field]: (field==='price'||field==='stock')? Number(e.target.value) : e.target.value };
+      vs[i] = { ...vs[i], [field]: value };
       return { ...prev, variants: vs };
     });
   };
@@ -92,6 +94,10 @@ const ProductDrawer = ({ open, product, onClose, onSave }) => {
     const out = { ...model };
     if (!out.id) out.id = `P${Date.now()}`;
     if (!out.stockHistory) out.stockHistory = out.stockHistory || [];
+
+    // Calculate total stock from variants
+    const totalStock = (out.variants || []).reduce((sum, v) => sum + (Number(v.stock) || 0), 0);
+    out.stock = totalStock;
 
     // update localStorage immediately (frontend-only persistence)
     try {
@@ -178,12 +184,18 @@ const ProductDrawer = ({ open, product, onClose, onSave }) => {
               ) : (
                 <div className="group-card">
                   {(model.variants||[]).map((v,i)=> (
-                    <div key={v.id} className="variant-row" style={{marginBottom:8}}>
-                      <input placeholder="SKU" value={v.sku||''} onChange={updateVariant(i,'sku')} />
-                      <input placeholder="Tên" value={v.name||''} onChange={updateVariant(i,'name')} />
-                      <input placeholder="Giá" type="number" value={v.price||0} onChange={updateVariant(i,'price')} />
-                      <input placeholder="Tồn" type="number" value={v.stock||0} onChange={updateVariant(i,'stock')} />
-                      <button onClick={()=>removeVariant(i)}>Xóa</button>
+                    <div key={v.id} className="variant-row" style={{marginBottom:8, display:'flex', flexDirection:'column', gap:4}}>
+                      <div style={{display:'flex', gap:4}}>
+                        <input placeholder="SKU" value={v.sku||''} onChange={updateVariant(i,'sku')} style={{flex:1}} />
+                        <input placeholder="Màu sắc" value={v.color_name||''} onChange={updateVariant(i,'color_name')} style={{flex:1}} />
+                        <input placeholder="Giá bán" type="number" value={v.sale_price||0} onChange={updateVariant(i,'sale_price')} style={{width:80}} />
+                        <input placeholder="Tồn" type="number" value={v.stock||0} onChange={updateVariant(i,'stock')} style={{width:60}} />
+                        <button onClick={()=>removeVariant(i)}>Xóa</button>
+                      </div>
+                      <div style={{display:'flex', gap:4, alignItems:'center'}}>
+                        <label><input type="checkbox" checked={v.is_preorder||false} onChange={updateVariant(i,'is_preorder')} /> Pre-order</label>
+                        <label>Ngày có hàng: <input type="date" value={v.expected_availability||''} onChange={updateVariant(i,'expected_availability')} /></label>
+                      </div>
                     </div>
                   ))}
                   <button style={{marginTop:8}} onClick={addVariant}>Thêm biến thể</button>
@@ -216,17 +228,17 @@ const ProductDrawer = ({ open, product, onClose, onSave }) => {
           {tab==='inventory' && (
             <div>
               <div className="inventory-card">
-                <div><strong>Tồn hiện tại: </strong> {model.stock || 0}</div>
+                <div><strong>Tồn hiện tại: </strong> {model.stock || 0} (tính từ biến thể)</div>
                 <div style={{marginTop:8}}>
-                  <label>Điều chỉnh số lượng (âm để giảm)</label>
-                  <input type="number" value={adjustAmount} onChange={e=>setAdjustAmount(Number(e.target.value))} />
+                  <label>Điều chỉnh số lượng (âm để giảm) - Tạm thời vô hiệu hóa vì tồn kho tính từ biến thể</label>
+                  <input type="number" value={adjustAmount} onChange={e=>setAdjustAmount(Number(e.target.value))} disabled />
                 </div>
                 <div style={{marginTop:8}}>
                   <label>Lý do</label>
-                  <input value={adjustReason} onChange={e=>setAdjustReason(e.target.value)} />
+                  <input value={adjustReason} onChange={e=>setAdjustReason(e.target.value)} disabled />
                 </div>
                 <div style={{marginTop:8}}>
-                  <button onClick={applyAdjustment}>Áp dụng</button>
+                  <button onClick={applyAdjustment} disabled>Áp dụng</button>
                 </div>
 
                 <div className="stock-history">

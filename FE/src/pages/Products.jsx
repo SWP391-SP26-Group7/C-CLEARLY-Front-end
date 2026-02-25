@@ -38,7 +38,7 @@ const Products = ({ setCurrentPage }) => {
   const filtered = products.filter(p => {
     const q = query.trim().toLowerCase();
     if (!q) return true;
-    return (p.name || '').toLowerCase().includes(q) || (p.sku || '').toLowerCase().includes(q);
+    return (p.name || '').toLowerCase().includes(q) || ((p.variants || []).some(v => (v.color_name || '').toLowerCase().includes(q)));
   });
 
   return (
@@ -46,21 +46,21 @@ const Products = ({ setCurrentPage }) => {
       <div className="products-toolbar">
         <h2>Danh sách Sản phẩm</h2>
         <div>
-          <input placeholder="Tìm tên hoặc SKU..." value={query} onChange={e => setQuery(e.target.value)} />
+          <input placeholder="Tìm tên hoặc màu..." value={query} onChange={e => setQuery(e.target.value)} />
           <button onClick={() => { setActive({ id: `P${Date.now()}`, name: '', sku: '', price:0, stock:0 }); setDrawerOpen(true); }}>Tạo mới</button>
         </div>
       </div>
 
       <table className="products-table">
         <thead>
-          <tr><th>ID</th><th>SKU</th><th>Tên</th><th>Loại</th><th>Giá</th><th>Tồn kho</th><th>Hành động</th></tr>
+          <tr><th>ID</th><th>Tên</th><th>Màu</th><th>Loại</th><th>Giá</th><th>Tồn kho</th><th>Trạng thái</th></tr>
         </thead>
         <tbody>
           {filtered.map(p => (
             <tr key={p.id}>
               <td>{p.id}</td>
-              <td>{p.sku}</td>
               <td>{p.name}</td>
+              <td>{(p.variants && p.variants.length > 0) ? (p.variants.length === 1 ? p.variants[0].color_name : 'Nhiều màu') : ''}</td>
               <td>{p.type}</td>
               <td>{(p.price||0).toLocaleString('vi-VN')} đ</td>
               <td>{p.stock}</td>
