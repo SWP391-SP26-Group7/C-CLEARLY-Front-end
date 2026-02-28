@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import StaffDrawer from '../components/StaffDrawer';
+import { useAuth } from '../AuthContext';
+import { canEdit } from '../permissions';
 import './StaffManagement.css';
 
 const STORAGE_KEY = 'cc_staff_v1';
@@ -19,11 +21,19 @@ const StaffManagement = () => {
   const [roleFilter, setRoleFilter] = useState('All');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [active, setActive] = useState(null);
+  const { user } = useAuth();
+  const editable = canEdit(user.role);
 
   useEffect(() => { setStaff(loadStaff()); }, []);
 
-  const handleCreate = () => { setActive(null); setDrawerOpen(true); };
-  const handleEdit = (s) => { setActive(s); setDrawerOpen(true); };
+  const handleCreate = () => {
+    if (!editable) { alert('Chỉ Manager được tạo nhân viên'); return; }
+    setActive(null); setDrawerOpen(true);
+  };
+  const handleEdit = (s) => {
+    if (!editable) { alert('Chỉ Manager được chỉnh sửa'); return; }
+    setActive(s); setDrawerOpen(true);
+  };
 
   const handleSave = (s) => {
     const list = staff.slice();
@@ -57,7 +67,7 @@ const StaffManagement = () => {
           </select>
         </div>
         <div>
-          <button className="btn-primary" onClick={handleCreate}>+ Thêm nhân viên</button>
+          <button className="btn-primary" onClick={handleCreate} disabled={!editable}>+ Thêm nhân viên</button>
         </div>
       </div>
 
@@ -74,7 +84,7 @@ const StaffManagement = () => {
               <td>{s.role}</td>
               <td>{s.status}</td>
               <td>
-                <button onClick={()=>handleEdit(s)}>Chỉnh sửa</button>
+                <button onClick={()=>handleEdit(s)} disabled={!editable}>Chỉnh sửa</button>
                 <button onClick={()=>handleToggle(s.id)}>{s.status==='Active'?'Xóa tài khoản':'Kích hoạt'}</button>
               </td>
             </tr>

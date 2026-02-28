@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductDrawer from '../components/ProductDrawer';
+import { useAuth } from '../AuthContext';
+import { canEdit } from '../permissions';
 import './Products.css';
 
 const STORAGE_KEY = 'cc_products_v1';
@@ -20,6 +22,8 @@ const Products = ({ setCurrentPage }) => {
   const [query, setQuery] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [active, setActive] = useState(null);
+  const { user } = useAuth();
+  const editable = canEdit(user.role);
 
   useEffect(() => { setProducts(loadProducts()); }, []);
 
@@ -47,7 +51,13 @@ const Products = ({ setCurrentPage }) => {
         <h2>Danh sách Sản phẩm</h2>
         <div>
           <input placeholder="Tìm tên hoặc màu..." value={query} onChange={e => setQuery(e.target.value)} />
-          <button onClick={() => { setActive({ id: `P${Date.now()}`, name: '', sku: '', price:0, stock:0 }); setDrawerOpen(true); }}>Tạo mới</button>
+          <button
+            onClick={() => {
+              if (!editable) { alert('Chỉ Manager mới được tạo sản phẩm'); return; }
+              setActive({ id: `P${Date.now()}`, name: '', sku: '', price:0, stock:0 }); setDrawerOpen(true);
+            }}
+            disabled={!editable}
+          >Tạo mới</button>
         </div>
       </div>
 
@@ -65,7 +75,13 @@ const Products = ({ setCurrentPage }) => {
               <td>{(p.price||0).toLocaleString('vi-VN')} đ</td>
               <td>{p.stock}</td>
               <td>
-                <button onClick={() => handleOpen(p)}>Xem / Sửa</button>
+                <button
+                  onClick={() => {
+                    if (!editable) { alert('Chỉ Manager mới được chỉnh sửa'); return; }
+                    handleOpen(p);
+                  }}
+                  disabled={!editable}
+                >Xem / Sửa</button>
               </td>
             </tr>
           ))}

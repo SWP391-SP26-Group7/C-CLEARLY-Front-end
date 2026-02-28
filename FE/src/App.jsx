@@ -15,11 +15,23 @@ import Support from './pages/Support'; // Import trang Hỗ trợ
 import CustomerSupport from './pages/CustomerSupport'; // Import trang Chăm sóc khách hàng
 import ChangePassword from './pages/ChangePassword'; // Import trang Đổi mật khẩu
 import StaffManagement from './pages/StaffManagement';
+import { useAuth } from './AuthContext';
+import { canAccess } from './permissions';
 import './App.css'; // Import CSS chính cho App
 
 function App() { // Component chính của ứng dụng
   // Quản lý state cho trang hiện tại
   const [currentPage, setCurrentPage] = useState('dashboard'); // State lưu trang đang hiển thị, mặc định 'dashboard'
+  const { user } = useAuth();
+
+  // wrapper navigation so that unauthorized pages cannot be set
+  const navigate = (page) => {
+    if (canAccess(page, user.role)) {
+      setCurrentPage(page);
+    } else {
+      alert('Bạn không có quyền truy cập trang này');
+    }
+  };
 
   // Clear all old data from localStorage on app load
   useEffect(() => {
@@ -34,31 +46,36 @@ function App() { // Component chính của ứng dụng
 
   // Hàm render nội dung dựa trên currentPage: Switch case để chọn component tương ứng
   const renderPage = () => {
+    // nếu người dùng không có quyền cho trang hiện tại, trả về thông báo
+    if (!canAccess(currentPage, user.role)) {
+      return <div style={{ padding: 20, color: '#c00' }}>Bạn không có quyền truy cập trang này.</div>;
+    }
+
     // support page keys and detail pages encoded as prefix:id
     if (currentPage.startsWith('delivered-detail:')) {
       const id = currentPage.split(':')[1];
-      return <DeliveredOrderDetail id={id} setCurrentPage={setCurrentPage} />;
+      return <DeliveredOrderDetail id={id} setCurrentPage={navigate} />;
     }
     if (currentPage.startsWith('return-detail:')) {
       const id = currentPage.split(':')[1];
-      return <ReturnDetail id={id} setCurrentPage={setCurrentPage} />;
+      return <ReturnDetail id={id} setCurrentPage={navigate} />;
     }
 
     switch (currentPage) {
       case 'dashboard':
         return <ManagerDashboard />; // Hiển thị Dashboard
       case 'preorder':
-        return <PreOrder setCurrentPage={setCurrentPage} />; // Hiển thị Pre-Order, truyền setCurrentPage để chuyển trang
+        return <PreOrder setCurrentPage={navigate} />; // Hiển thị Pre-Order, truyền navigate để chuyển trang
       case 'prescription':
-        return <Prescription setCurrentPage={setCurrentPage} />; // Hiển thị Prescription, truyền setCurrentPage
+        return <Prescription setCurrentPage={navigate} />; // Hiển thị Prescription, truyền navigate
       case 'delivered':
-        return <DeliveredOrders setCurrentPage={setCurrentPage} />; // Đơn đã giao
+        return <DeliveredOrders setCurrentPage={navigate} />; // Đơn đã giao
       case 'products':
-        return <Products setCurrentPage={setCurrentPage} />; // Danh sách Sản phẩm
+        return <Products setCurrentPage={navigate} />; // Danh sách Sản phẩm
       case 'staff':
         return <StaffManagement />; // Quản lý nhân sự
       case 'returns':
-        return <Returns setCurrentPage={setCurrentPage} />; // Đổi trả hàng
+        return <Returns setCurrentPage={navigate} />; // Đổi trả hàng
       case 'inventory':
         return <Inventory />; // Hiển thị Inventory
       case 'shipper':

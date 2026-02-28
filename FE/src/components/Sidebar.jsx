@@ -1,5 +1,7 @@
 import React, { useState } from 'react'; // Import React và useState hook để quản lý state
 import { FaTachometerAlt, FaGlasses, FaShoppingCart, FaFileMedical, FaWarehouse, FaTruck, FaQuestionCircle, FaKey, FaSignOutAlt, FaChevronDown, FaChevronUp, FaCheckCircle, FaUndoAlt, FaUsers, FaHeadset } from 'react-icons/fa'; // Import các icon từ react-icons cho menu
+import { useAuth } from '../AuthContext';
+import { canAccess } from '../permissions';
 import './Sidebar.css'; // Import CSS cho styling Sidebar
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
@@ -9,6 +11,8 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
   // - setCurrentPage: function, hàm để thay đổi trang
 
   const [openSubMenu, setOpenSubMenu] = useState(null); // State để theo dõi sub-menu nào đang mở (key của menu cha)
+
+  const { user } = useAuth();
 
   // Dữ liệu menu chính: Dashboard, Quản lý sản phẩm (với sub-menu), Quản lý kho, Quản lý giao hàng
   const menuItems = [
@@ -37,13 +41,21 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
     if (item.sub) {
       setOpenSubMenu(openSubMenu === item.key ? null : item.key); // Toggle sub-menu
     } else {
-      setCurrentPage(item.key); // Chuyển trang
+      if (canAccess(item.key, user.role)) {
+        setCurrentPage(item.key); // Chuyển trang
+      } else {
+        alert('Bạn không có quyền truy cập');
+      }
     }
   };
 
-  // Hàm xử lý click vào sub-menu item: Chuyển trực tiếp đến trang con
+  // Hàm xử lý click vào sub-menu item: Chuyển trực tiếp đến trang con (với kiểm tra quyền)
   const handleSubClick = (subKey) => {
-    setCurrentPage(subKey);
+    if (canAccess(subKey, user.role)) {
+      setCurrentPage(subKey);
+    } else {
+      alert('Bạn không có quyền truy cập');
+    }
   };
 
   return (
@@ -52,31 +64,41 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
         <img src="/images/Logo.png" alt="Logo" />
       </div>
       <ul className="menu"> {/* Danh sách menu chính */}
-        {menuItems.map(item => (
-          <li key={item.key} className={`menu-item ${currentPage === item.key ? 'active' : ''}`}> {/* Item menu với class active nếu đang chọn */}
-            <div className="menu-card" onClick={() => handleMenuClick(item)}> {/* Card chứa icon, label, và chevron nếu có sub */}
-              <item.icon className="menu-icon" /> {/* Icon đại diện cho menu */}
-              <span>{item.label}</span> {/* Nhãn menu */}
-              {item.sub && ( /* Nếu có sub-menu, hiển thị chevron */
-                openSubMenu === item.key ? <FaChevronUp className="chevron" /> : <FaChevronDown className="chevron" />
+        {menuItems.map(item => {
+          const allowed = item.sub
+            ? item.sub.some(sub => canAccess(sub.key, user.role))
+            : canAccess(item.key, user.role);
+          if (!allowed) return null;
+          return (
+            <li key={item.key} className={`menu-item ${currentPage === item.key ? 'active' : ''}`}>
+              <div className="menu-card" onClick={() => handleMenuClick(item)}>
+                <item.icon className="menu-icon" />
+                <span>{item.label}</span>
+                {item.sub && (
+                  openSubMenu === item.key ? <FaChevronUp className="chevron" /> : <FaChevronDown className="chevron" />
+                )}
+              </div>
+              {item.sub && openSubMenu === item.key && (
+                <ul className="sub-menu">
+                  {item.sub.map(sub => {
+                    const allowedSub = canAccess(sub.key, user.role);
+                    if (!allowedSub) return null;
+                    return (
+                      <li
+                        key={sub.key}
+                        className={`sub-item ${currentPage === sub.key ? 'active' : ''}`}
+                        onClick={() => handleSubClick(sub.key)}
+                      >
+                        <sub.icon className="sub-icon" />
+                        <span>{sub.label}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
               )}
-            </div>
-            {item.sub && openSubMenu === item.key && (
-              <ul className="sub-menu">
-                {item.sub.map(sub => (
-                  <li
-                    key={sub.key}
-                    className={`sub-item ${currentPage === sub.key ? 'active' : ''}`}
-                    onClick={() => handleSubClick(sub.key)}
-                  >
-                    <sub.icon className="sub-icon" /> {/* Icon cho sub-menu */}
-                    <span>{sub.label}</span> {/* Nhãn sub-menu */}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
       <ul className="bottom-menu"> {/* Danh sách menu bottom */}
         {bottomItems.map(item => (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaBell, FaUser } from 'react-icons/fa';
+import { useAuth } from '../AuthContext';
 import './Header.css'; // Tạo CSS nếu cần
 
 const Header = ({ title }) => {
@@ -8,6 +9,7 @@ const Header = ({ title }) => {
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const { user, login, logout, roles } = useAuth();
 
   // Mock data cho thông báo
   const notifications = [
@@ -44,17 +46,33 @@ const Header = ({ title }) => {
           </div>
         )}
         <div className="user-info" onClick={toggleUserDropdown}>
-          <div className="user-avatar">M</div>
+          <div className="user-avatar">{user.role ? user.role.charAt(0) : '?'}</div>
           <div>
-            <div className="user-name">Manager</div>
-            <div className="user-role">Manager</div>
+            <div className="user-name">{user.name || 'Guest'}</div>
+            <div className="user-role">{user.role || 'Không xác định'}</div>
           </div>
         </div>
         {showUserDropdown && (
           <div className="user-dropdown">
-            <div className="user-dropdown-item">Tên đăng nhập: manager01</div>
-            <div className="user-dropdown-item">Vai trò: Nhân viên</div>
-            <div className="user-dropdown-item">Email: manager@example.com</div>
+            {/* allow switching role for demo purposes */}
+            <div className="user-dropdown-item">
+              <label>Vai trò:&nbsp;</label>
+              <select
+                value={user.role}
+                onChange={e => login(e.target.value, user.name)}
+              >
+                <option value="">(none)</option>
+                {roles.map(r => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
+            </div>
+            <div className="user-dropdown-item">
+              <button onClick={() => {
+                logout();
+                setShowUserDropdown(false);
+              }}>Đăng xuất</button>
+            </div>
           </div>
         )}
       </div>
