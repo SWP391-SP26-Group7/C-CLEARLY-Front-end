@@ -23,7 +23,7 @@ const Products = ({ setCurrentPage }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [active, setActive] = useState(null);
   const { user } = useAuth();
-  const editable = canEdit(user.role);
+  const editable = canEdit(user.role, 'products');
 
   useEffect(() => { setProducts(loadProducts()); }, []);
 

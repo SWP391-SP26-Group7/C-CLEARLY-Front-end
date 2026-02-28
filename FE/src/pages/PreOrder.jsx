@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../AuthContext';
+import { canEdit } from '../permissions';
 import Pagination from '../components/Pagination';
 import Modal from '../components/Modal';
 import './PreOrder.css'; // CSS cho trang
@@ -24,6 +26,9 @@ const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
   const itemsPerPage = 10;
   const [orders, setOrders] = useState(loadPreOrders());
 
+  const { user } = useAuth();
+  const editable = canEdit(user.role, 'preorder');
+
   // Tính toán items hiển thị cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -43,6 +48,7 @@ const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
   };
 
   const handleStatusChange = (newStatus) => {
+    if (!editable) { alert('Bạn không có quyền chỉnh sửa đơn Pre-Order'); return; }
     if (selectedOrder.status === 'Chờ xác nhận' && newStatus !== 'Chờ xác nhận') {
       const requiredPayment = selectedOrder.totalPrice * 0.3;
       if (selectedOrder.paymentAmount < requiredPayment) {
@@ -102,7 +108,7 @@ const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
         <div className="detail-header">
           <button onClick={handleBack}>Quay lại danh sách</button>
           <span>Mã đơn hàng: {selectedOrder.id}</span>
-          <select value={selectedOrder.status} onChange={(e) => handleStatusChange(e.target.value)}>
+          <select value={selectedOrder.status} onChange={(e) => handleStatusChange(e.target.value)} disabled={!editable}>
             <option>Chờ xác nhận</option>
             <option>Chờ làm kính</option>
             <option>Chuẩn bị đóng gói</option>
@@ -127,7 +133,7 @@ const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
             <p>Trạng thái: {selectedOrder.paymentAmount >= selectedOrder.totalPrice ? 'Đã thanh toán' : 'Chưa thanh toán'}</p>
           </div>
         </div>
-        <button className="save-button" onClick={handleSave}>Lưu thay đổi</button>
+        <button className="save-button" onClick={handleSave} disabled={!editable}>Lưu thay đổi</button>
         {showConfirmDialog && (
           <div className="confirm-dialog">
             <h3>Xác nhận hoàn thành đơn</h3>
@@ -172,13 +178,13 @@ const PreOrder = ({ setCurrentPage: setAppCurrentPage }) => {
       />
       <Modal isOpen={showConfirmDialog} onClose={handleCancelConfirm} title="Xác nhận hoàn thành đơn">
         <p>Bạn có muốn hoàn thành đơn hàng này không?</p>
-        <button onClick={handleConfirmComplete}>Xác nhận</button>
+        <button onClick={handleConfirmComplete} disabled={!editable}>Xác nhận</button>
         <button onClick={handleCancelConfirm}>Hủy bỏ</button>
       </Modal>
       <Modal isOpen={showUnsavedModal} onClose={() => setShowUnsavedModal(false)} title="⚠️ Thay đổi chưa lưu">
         <p>Thay đổi bạn đã thực hiện có thể không được lưu.</p>
         <button onClick={handleDiscard}>Discard</button>
-        <button onClick={handleSaveAndQuit}>Save & Quit</button>
+        <button onClick={handleSaveAndQuit} disabled={!editable}>Save & Quit</button>
       </Modal>
     </div>
   );
