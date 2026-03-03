@@ -3,7 +3,7 @@ import { FaBell, FaUser } from 'react-icons/fa';
 import { useAuth } from '../AuthContext';
 import './Header.css'; // Tạo CSS nếu cần
 
-const Header = ({ title }) => {
+const Header = ({ title, showLogo = true, showTitle = true }) => {
   // Component Header hiển thị trên cùng
   // title: tiêu đề của trang
 
@@ -29,10 +29,12 @@ const Header = ({ title }) => {
   return (
     <header className="header">
       <div className="header-left">
-        <img src="/images/Logo.png" alt="Logo" />
-        <div>
-          <div className="title">Manager Dashboard</div>
-        </div>
+        {showLogo && <img src="/images/Logo.png" alt="Logo" />}
+        {showTitle && title && (
+          <div>
+            <div className="title">{title}</div>
+          </div>
+        )}
       </div>
       <div className="header-right">
         <button className="notification-btn" onClick={toggleNotifications}>

@@ -127,7 +127,8 @@ function App() { // Component chính của ứng dụng
     <div className="app"> {/* Container chính của app */}
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} /> {/* Sidebar bên trái */}
       <div className="main-content"> {/* Nội dung chính bên phải */}
-        <Header title={getPageTitle()} /> {/* Header với tiêu đề động */}
+        {/* Header - hiện không hiển thị tiêu đề văn bản và logo (logo lớn đã ở sidebar) */}
+      <Header title={getPageTitle()} showTitle={false} showLogo={false} />
         <main>
           {renderPage()} {/* Render trang hiện tại */}
         </main>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../AuthContext';
 import StatCard from '../components/StatCard';
 import OrderTable from '../components/OrderTable';
 import './ManagerDashboard.css';
@@ -117,13 +118,18 @@ const ManagerDashboard = () => {
     return `${datePart} ${timePart}`;
   };
 
+  // lấy thông tin user để hiển thị dynamic
+  const { user } = useAuth();
+
   return (
     <div className="dashboard-page">
       <div className="profile-header">
-        <div className="profile-avatar">M</div>
+        <div className="profile-avatar">{user.name ? user.name.charAt(0).toUpperCase() : (user.role ? user.role.charAt(0) : 'U')}</div>
         <div className="profile-info">
           <h2>Welcome to WPH Dashboard</h2>
-          <div className="meta">@manager • {formatDateTime(now)}</div>
+          <div className="meta">
+            @{user.role || 'guest'} • {formatDateTime(now)}
+          </div>
         </div>
       </div>
 
