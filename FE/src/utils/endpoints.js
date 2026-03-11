@@ -80,6 +80,11 @@ export const ENDPOINT = {
 
   // Upload
   UPLOAD_IMAGE: '/upload/image',
+
+  // Public config
+  SHIPPING_CONFIG: '/public/shipping-config',
+  MAINTENANCE_STATUS: '/public/maintenance-status',
+  VALIDATE_VOUCHER: '/public/promotions/validate',
 };
 
 // Query Keys for React Query
@@ -127,4 +132,10 @@ export const QUERY_KEYS = {
 
   // Addresses
   ADDRESSES: ['addresses'],
+
+  // Shipping config
+  SHIPPING_CONFIG: ['shipping-config'],
+
+  // Maintenance
+  MAINTENANCE_STATUS: ['maintenance-status'],
 };
