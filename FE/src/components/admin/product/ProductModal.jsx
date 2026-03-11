@@ -8,8 +8,11 @@ import {
   Plus,
   Loader2,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
+import ReactQuill from 'react-quill-new';
 import { toast } from 'react-toastify';
+import 'react-quill-new/dist/quill.snow.css';
+import { uploadRequest } from '@/api/upload';
 import {
   FRAME_MATERIALS,
   FRAME_SHAPES,
@@ -19,7 +22,6 @@ import {
   LENS_TYPES,
   LENS_SUB_CATEGORIES,
 } from '@/mocks/data';
-import { uploadRequest } from '@/api/upload';
 
 const ProductModal = ({
   show,
@@ -35,6 +37,53 @@ const ProductModal = ({
   isPending,
 }) => {
   const [uploading, setUploading] = useState(false);
+  const quillRef = useRef(null);
+
+  // Quill image handler: upload to Cloudinary then insert URL
+  const quillImageHandler = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadRequest.uploadImage(
+          file,
+          'products/description'
+        );
+        const quill = quillRef.current?.getEditor();
+        if (quill) {
+          const range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', url);
+          quill.setSelection(range.index + 1);
+        }
+      } catch {
+        toast.error('Upload ảnh thất bại');
+      }
+    };
+  };
+
+  const quillModules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ align: [] }],
+          ['link', 'image'],
+          ['clean'],
+        ],
+        handlers: {
+          image: quillImageHandler,
+        },
+      },
+    }),
+    []
+  );
 
   if (!show) return null;
 
@@ -104,7 +153,9 @@ const ProductModal = ({
                     placeholder="VD: Gọng kính Ray-Ban Aviator"
                   />
                 </div>
-                <div className={`grid ${formData.type === 'accessory' ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
+                <div
+                  className={`grid ${formData.type === 'accessory' ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}
+                >
                   {formData.type === 'accessory' && (
                     <div>
                       <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase">
@@ -185,203 +236,236 @@ const ProductModal = ({
               </div>
             </div>
 
+            {/* Section: Mô tả sản phẩm - Rich text editor */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wider">
+                Mô tả sản phẩm
+              </label>
+              <div className="border border-gray-200 rounded-lg overflow-hidden [&_.ql-toolbar]:border-0 [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-gray-200 [&_.ql-toolbar]:bg-gray-50 [&_.ql-container]:border-0 [&_.ql-editor]:min-h-[150px] [&_.ql-editor]:max-h-[300px] [&_.ql-editor]:overflow-y-auto">
+                <ReactQuill
+                  ref={quillRef}
+                  theme="snow"
+                  value={formData.description || ''}
+                  onChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      description: value === '<p><br></p>' ? '' : value,
+                    })
+                  }
+                  modules={quillModules}
+                  placeholder="Mô tả chi tiết về sản phẩm (hỗ trợ định dạng văn bản và hình ảnh)..."
+                />
+              </div>
+            </div>
+
             {/* Section 2: Thông số kỹ thuật - Bố cục ngang */}
             {(formData.type === 'frame' || formData.type === 'lens') && (
               <div
                 className={`p-4 rounded-xl border ${formData.type === 'frame' ? 'bg-blue-50/50 border-blue-100' : 'bg-green-50/50 border-green-100'}`}
               >
-              <div className="flex items-center gap-2 mb-3 font-bold text-gray-700 text-sm">
-                {formData.type === 'frame' ? (
-                  <Glasses size={18} />
-                ) : (
-                  <Scan size={18} />
-                )}
-                Thông số kỹ thuật
-              </div>
-              <div className={`grid ${formData.type === 'frame' ? 'grid-cols-4' : 'grid-cols-3'} gap-4`}>
-                {formData.type === 'frame' && (
-                  <>
-                    <div>
-                      <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                        Danh mục
-                      </label>
-                      <select
-                        value={formData.subCategory || ''}
-                        onChange={(e) =>
-                          setFormData({ ...formData, subCategory: e.target.value })
-                        }
-                        className="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="">Chọn...</option>
-                        {FRAME_SUB_CATEGORIES.map((c) => (
-                          <option key={c.value} value={c.value}>
-                            {c.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                        Chất liệu
-                      </label>
-                      <select
-                        value={formData.material}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            material: e.target.value,
-                          })
-                        }
-                        className="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="">Chọn...</option>
-                        {FRAME_MATERIALS.map((m) => (
-                          <option key={m} value={m}>
-                            {m}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                        Dáng kính
-                      </label>
-                      <select
-                        value={formData.shape}
-                        onChange={(e) =>
-                          setFormData({ ...formData, shape: e.target.value })
-                        }
-                        className="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="">Chọn...</option>
-                        {FRAME_SHAPES.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="grid grid-cols-3 gap-1">
+                <div className="flex items-center gap-2 mb-3 font-bold text-gray-700 text-sm">
+                  {formData.type === 'frame' ? (
+                    <Glasses size={18} />
+                  ) : (
+                    <Scan size={18} />
+                  )}
+                  Thông số kỹ thuật
+                </div>
+                <div
+                  className={`grid ${formData.type === 'frame' ? 'grid-cols-4' : 'grid-cols-3'} gap-4`}
+                >
+                  {formData.type === 'frame' && (
+                    <>
                       <div>
                         <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                          Càng (mm)
+                          Danh mục
                         </label>
-                        <input
-                          type="text"
-                          value={formData.templeLength}
-                          onChange={(e) =>
-                            setFormData({ ...formData, templeLength: e.target.value })
-                          }
-                          className="w-full p-2 border rounded-md text-sm bg-white"
-                          placeholder="140"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                          Mắt (mm)
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.lensWidth}
+                        <select
+                          value={formData.subCategory || ''}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              lensWidth: e.target.value,
+                              subCategory: e.target.value,
                             })
                           }
                           className="w-full p-2 border rounded-md text-sm bg-white"
-                          placeholder="50"
-                        />
+                        >
+                          <option value="">Chọn...</option>
+                          {FRAME_SUB_CATEGORIES.map((c) => (
+                            <option key={c.value} value={c.value}>
+                              {c.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       <div>
                         <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                          Cầu (mm)
+                          Chất liệu
                         </label>
-                        <input
-                          type="text"
-                          value={formData.bridgeWidth}
+                        <select
+                          value={formData.material}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              bridgeWidth: e.target.value,
+                              material: e.target.value,
                             })
                           }
                           className="w-full p-2 border rounded-md text-sm bg-white"
-                          placeholder="18"
-                        />
+                        >
+                          <option value="">Chọn...</option>
+                          {FRAME_MATERIALS.map((m) => (
+                            <option key={m} value={m}>
+                              {m}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                    </div>
-                  </>
-                )}
-                {formData.type === 'lens' && (
-                  <>
-                    <div>
-                      <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                        Danh mục
-                      </label>
-                      <select
-                        value={formData.subCategory || ''}
-                        onChange={(e) =>
-                          setFormData({ ...formData, subCategory: e.target.value })
-                        }
-                        className="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="">Chọn...</option>
-                        {LENS_SUB_CATEGORIES.map((c) => (
-                          <option key={c.value} value={c.value}>
-                            {c.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                        Chất liệu
-                      </label>
-                      <select
-                        value={formData.lensMaterial}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            lensMaterial: e.target.value,
-                          })
-                        }
-                        className="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="">Chọn...</option>
-                        {LENS_MATERIALS.map((m) => (
-                          <option key={m} value={m}>
-                            {m}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
-                        Loại tròng
-                      </label>
-                      <select
-                        value={formData.lensType || ''}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            lensType: e.target.value,
-                          })
-                        }
-                        className="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="">Chọn...</option>
-                        {LENS_TYPES.map((t) => (
-                          <option key={t} value={t}>
-                            {t}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </>
-                )}
+                      <div>
+                        <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                          Dáng kính
+                        </label>
+                        <select
+                          value={formData.shape}
+                          onChange={(e) =>
+                            setFormData({ ...formData, shape: e.target.value })
+                          }
+                          className="w-full p-2 border rounded-md text-sm bg-white"
+                        >
+                          <option value="">Chọn...</option>
+                          {FRAME_SHAPES.map((s) => (
+                            <option key={s} value={s}>
+                              {s}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="grid grid-cols-3 gap-1">
+                        <div>
+                          <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                            Càng (mm)
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.templeLength}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                templeLength: e.target.value,
+                              })
+                            }
+                            className="w-full p-2 border rounded-md text-sm bg-white"
+                            placeholder="140"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                            Mắt (mm)
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.lensWidth}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                lensWidth: e.target.value,
+                              })
+                            }
+                            className="w-full p-2 border rounded-md text-sm bg-white"
+                            placeholder="50"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                            Cầu (mm)
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.bridgeWidth}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                bridgeWidth: e.target.value,
+                              })
+                            }
+                            className="w-full p-2 border rounded-md text-sm bg-white"
+                            placeholder="18"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {formData.type === 'lens' && (
+                    <>
+                      <div>
+                        <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                          Danh mục
+                        </label>
+                        <select
+                          value={formData.subCategory || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              subCategory: e.target.value,
+                            })
+                          }
+                          className="w-full p-2 border rounded-md text-sm bg-white"
+                        >
+                          <option value="">Chọn...</option>
+                          {LENS_SUB_CATEGORIES.map((c) => (
+                            <option key={c.value} value={c.value}>
+                              {c.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                          Chất liệu
+                        </label>
+                        <select
+                          value={formData.lensMaterial}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              lensMaterial: e.target.value,
+                            })
+                          }
+                          className="w-full p-2 border rounded-md text-sm bg-white"
+                        >
+                          <option value="">Chọn...</option>
+                          {LENS_MATERIALS.map((m) => (
+                            <option key={m} value={m}>
+                              {m}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                          Loại tròng
+                        </label>
+                        <select
+                          value={formData.lensType || ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              lensType: e.target.value,
+                            })
+                          }
+                          className="w-full p-2 border rounded-md text-sm bg-white"
+                        >
+                          <option value="">Chọn...</option>
+                          {LENS_TYPES.map((t) => (
+                            <option key={t} value={t}>
+                              {t}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
             )}
 
             {/* Section 3: Biến thể - Table gọn hơn */}
