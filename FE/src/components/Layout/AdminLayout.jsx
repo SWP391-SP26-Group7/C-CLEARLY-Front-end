@@ -43,9 +43,8 @@ const getMenuItems = (role) => {
 
     // Operations: Kho & Gia công
     [ROLES.OPERATIONS]: [
-      { path: '/operations', label: 'Tổng quan', icon: Home },
       {
-        path: '/operations/board',
+        path: '/operations',
         label: 'Điều phối đơn',
         icon: ClipboardList,
       },
@@ -55,6 +54,11 @@ const getMenuItems = (role) => {
         path: '/operations/shipping',
         label: 'Giao vận & Tracking',
         icon: Truck,
+      },
+      {
+        path: '/operations/preorder',
+        label: 'Nhận hàng Pre-order',
+        icon: Package,
       },
       { path: '/operations/inventory', label: 'Quản lý kho', icon: Warehouse },
     ],
